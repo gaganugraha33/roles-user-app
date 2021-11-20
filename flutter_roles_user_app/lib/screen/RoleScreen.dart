@@ -4,6 +4,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_roles_user_app/blocs/role_bloc/role_bloc.dart';
 import 'package:flutter_roles_user_app/component/Skeleton.dart';
 import 'package:flutter_roles_user_app/repository/UserRepository.dart';
+import 'package:flutter_roles_user_app/screen/CreateRoleScreen.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class RoleScreen extends StatefulWidget {
@@ -97,7 +98,12 @@ class _RoleScreenState extends State<RoleScreen> {
     return Container();
   }
 
-  _addNewRole() {}
+  _addNewRole() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CreateRoleScreen()),
+    );
+  }
 
   Future<void> refresh() async {
     _roleBloc.add(GetRoleEvent());

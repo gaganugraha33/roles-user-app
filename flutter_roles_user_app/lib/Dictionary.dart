@@ -1,20 +1,12 @@
 class Dictionary {
   // Error messages
-  static String errorConnection = 'Periksa kembali koneksi Internet';
-  static String errorIOConnection = 'Koneksi ke server bermasalah';
-  static String errorUrl = 'Tidak bisa mengakses halaman';
-  static String errorLogin = 'Terjadi kesalahan saat login';
-  static String errorTimeOut = 'Server tidak merespon';
-  static String errorNotFound = 'Data tidak ditemukan';
-  static String errorUnauthorized = 'Izin akses ke server ditolak';
-  static String errorInternal = 'Server sedang dalam perbaikan';
-  static String errorExternal =
-      'Terjadi kesalahan periksa kembali koneksi internet anda';
-  static String errorGetEmail = 'Gagal mendapatkan email, coba lagi';
-  static String errorStatusUnActive = 'Username belum aktif';
-  static String errorListComment = 'Tidak dapat menampilkan komentar';
-  static String errorStatisticsNotExists =
-      'Data statistik saat ini tidak tersedia, silakan coba kembali beberapa saat';
+  static String errorConnection = 'Please check your connection';
+  static String errorIOConnection = 'Connection problem to the server';
+  static String errorLogin = 'An error occurred while logging in';
+  static String errorTimeOut = 'Server not responding';
+  static String errorNotFound = 'Data not found';
+  static String errorUnauthorized = 'Access permission to server denied';
+  static String somethingWrong = 'Something Wrong';
 
-  static String somethingWrong = 'Terjadi kesalahan';
+  static String requiredForm = ' • Must be filled';
 }
