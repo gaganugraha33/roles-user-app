@@ -10,12 +10,11 @@ import 'package:http/http.dart' as http;
 import '../Dictionary.dart';
 import '../EndPointPath.dart';
 import '../ErrorException.dart';
-import '../HttpHeaders.dart';
 
 class UserRepository {
   Future<UserModel> getUserAPi() async {
     final response = await http
-        .get(EndPointPath.userApi, headers: await HttpHeaders.headers())
+        .get(EndPointPath.userApi)
         .timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {
