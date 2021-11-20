@@ -20,24 +20,33 @@ class _RoleScreenState extends State<RoleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocProvider<RoleBloc>(
-      create: (BuildContext context) => _roleBloc =
-          RoleBloc(userRepository: UserRepository())..add(GetRoleEvent()),
-      child: BlocBuilder<RoleBloc, RoleState>(
-        builder: (context, state) => SmartRefresher(
-            controller: _mainRefreshController,
-            enablePullDown: true,
-            header: WaterDropMaterialHeader(),
-            onRefresh: refresh,
-            child: state is RoleLoading
-                ? _buildLoading()
-                : state is RoleSuccess
-                    ? _buildContent(state)
-                    : state is RoleFailure
-                        ? _buildFailure(state)
-                        : Container()),
+      body: BlocProvider<RoleBloc>(
+        create: (BuildContext context) => _roleBloc =
+            RoleBloc(userRepository: UserRepository())..add(GetRoleEvent()),
+        child: BlocBuilder<RoleBloc, RoleState>(
+          builder: (context, state) => SmartRefresher(
+              controller: _mainRefreshController,
+              enablePullDown: true,
+              header: WaterDropMaterialHeader(),
+              onRefresh: refresh,
+              child: state is RoleLoading
+                  ? _buildLoading()
+                  : state is RoleSuccess
+                      ? _buildContent(state)
+                      : state is RoleFailure
+                          ? _buildFailure(state)
+                          : Container()),
+        ),
       ),
-    ));
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        child: FloatingActionButton(
+          onPressed: _addNewRole,
+          child: Icon(Icons.add),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    );
   }
 
   _buildLoading() {
@@ -87,6 +96,8 @@ class _RoleScreenState extends State<RoleScreen> {
   _buildFailure(RoleFailure state) {
     return Container();
   }
+
+  _addNewRole() {}
 
   Future<void> refresh() async {
     _roleBloc.add(GetRoleEvent());

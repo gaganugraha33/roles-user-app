@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_roles_user_app/exceptions/ValidationException.dart';
+import 'package:flutter_roles_user_app/model/CreateRoleModel.dart';
 import 'package:flutter_roles_user_app/model/RoleModel.dart';
 import 'package:flutter_roles_user_app/model/UserModel.dart';
 import 'package:http/http.dart' as http;
@@ -12,13 +14,9 @@ import '../HttpHeaders.dart';
 
 class UserRepository {
   Future<UserModel> getUserAPi() async {
-    print('kesini masuk ngga? ');
-
     final response = await http
         .get(EndPointPath.userApi, headers: await HttpHeaders.headers())
         .timeout(const Duration(seconds: 10));
-
-    print('cekk isinya apa ' + response.body.toString());
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -59,14 +57,29 @@ class UserRepository {
     }
   }
 
-  Future<RoleModel> createRoleAPi() async {
+  Future<CreateRoleModel> createRoleAPi(
+      {@required String title,
+      @required String description,
+      @required String requirement}) async {
+    Map requestData = {
+      "title": title,
+      "requirement": requirement,
+      "description": description,
+    };
+
+    var requestBody = json.encode(requestData);
+
+    print('params ' + requestData.toString());
+
     var response = await http
-        .post('${EndPointPath.roleApi}')
+        .post('${EndPointPath.roleApi}', body: requestBody)
         .timeout(const Duration(seconds: 10));
+
+    print('cekk response ' + response.body.toString());
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      RoleModel record = RoleModel.fromJson(data);
+      CreateRoleModel record = CreateRoleModel.fromJson(data);
 
       return record;
     } else if (response.statusCode == 401) {

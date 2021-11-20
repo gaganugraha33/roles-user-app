@@ -68,19 +68,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int _selectedIndex = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -105,8 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _buildContent(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.blue,
-        selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.white, size: 40),
+        selectedFontSize: 15,
+        selectedIconTheme: IconThemeData(color: Colors.white, size: 30),
         selectedItemColor: Colors.white,
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
         elevation: 0,
@@ -119,12 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-      ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
