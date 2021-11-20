@@ -109,4 +109,10 @@ class _RoleScreenState extends State<RoleScreen> {
     _roleBloc.add(GetRoleEvent());
     _mainRefreshController.refreshCompleted();
   }
+
+  @override
+  void dispose() {
+    _roleBloc.close();
+    super.dispose();
+  }
 }

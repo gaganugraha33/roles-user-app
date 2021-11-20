@@ -96,4 +96,10 @@ class _UserScreenState extends State<UserScreen> {
     _userBloc.add(GetUserEvent());
     _mainRefreshController.refreshCompleted();
   }
+
+  @override
+  void dispose() {
+    _userBloc.close();
+    super.dispose();
+  }
 }

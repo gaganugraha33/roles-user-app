@@ -43,6 +43,7 @@ class _CreateRoleScreenState extends State<CreateRoleScreen> {
 
                     await showDialog(
                       context: context,
+                      barrierDismissible: false,
                       builder: (BuildContext context) => DialogTextOnly(
                         description: 'Create role success',
                         buttonText: Dictionary.ok,
@@ -140,5 +141,14 @@ class _CreateRoleScreenState extends State<CreateRoleScreen> {
       return 'Please enter some text';
     }
     return null;
+  }
+
+  @override
+  void dispose() {
+    _titleTextController.dispose();
+    _requirementTextController.dispose();
+    _descriptionTextController.dispose();
+    _createRoleBloc.close();
+    super.dispose();
   }
 }
