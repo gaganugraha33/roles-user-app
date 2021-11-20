@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_roles_user_app/exceptions/ValidationException.dart';
@@ -12,9 +13,14 @@ import '../EndPointPath.dart';
 import '../ErrorException.dart';
 
 class UserRepository {
+  final headers = {
+    HttpHeaders.contentTypeHeader: 'application/json',
+    HttpHeaders.acceptHeader: 'application/json'
+  };
+
   Future<UserModel> getUserAPi() async {
     final response = await http
-        .get(EndPointPath.userApi)
+        .get(EndPointPath.userApi, headers: headers)
         .timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {
@@ -36,7 +42,7 @@ class UserRepository {
 
   Future<RoleModel> getRoleAPi() async {
     var response = await http
-        .get('${EndPointPath.roleApi}')
+        .get('${EndPointPath.roleApi}', headers: headers)
         .timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {
@@ -60,18 +66,17 @@ class UserRepository {
       {@required String title,
       @required String description,
       @required String requirement}) async {
-    Map requestData = {
+    var requestData = {
       "title": title,
       "requirement": requirement,
       "description": description,
     };
 
-    var requestBody = json.encode(requestData);
-
     print('params ' + requestData.toString());
 
     var response = await http
-        .post('${EndPointPath.roleApi}', body: requestBody)
+        .post('${EndPointPath.roleApi}',
+            headers: headers, body: json.encode(requestData))
         .timeout(const Duration(seconds: 10));
 
     print('cekk response ' + response.body.toString());

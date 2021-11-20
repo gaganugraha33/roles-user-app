@@ -9,4 +9,5 @@ class Dictionary {
   static String somethingWrong = 'Something Wrong';
 
   static String requiredForm = ' • Must be filled';
+  static String ok = 'OK';
 }
