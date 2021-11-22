@@ -15,6 +15,7 @@ part 'role_state.dart';
 class RoleBloc extends Bloc<RoleEvent, RoleState> {
   final UserRepository userRepository;
   int page = 1;
+  bool isFetching = false;
 
   RoleBloc({@required this.userRepository}) : assert(userRepository != null);
 
@@ -24,11 +25,18 @@ class RoleBloc extends Bloc<RoleEvent, RoleState> {
   @override
   Stream<RoleState> mapEventToState(RoleEvent event) async* {
     if (event is GetRoleEvent) {
-      yield RoleLoading();
+      if (!isFetching) {
+        yield RoleLoading();
+      } else {
+        yield RoleLoadMore();
+      }
 
       try {
         RoleModel roleModel = await userRepository.getRoleAPi(page: page);
         yield RoleSuccess(roleModel: roleModel);
+        if (roleModel.data.isNotEmpty) {
+          page++;
+        }
       } on ValidationException catch (error) {
         yield ValidationError(errors: error.errors);
       } catch (e) {

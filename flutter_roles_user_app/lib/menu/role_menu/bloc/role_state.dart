@@ -19,6 +19,16 @@ class RoleLoading extends RoleState {
   List<Object> get props => [];
 }
 
+class RoleLoadMore extends RoleState {
+  @override
+  String toString() {
+    return 'State RoleLoadMore';
+  }
+
+  @override
+  List<Object> get props => [];
+}
+
 class RoleSuccess extends RoleState {
   final RoleModel roleModel;
 

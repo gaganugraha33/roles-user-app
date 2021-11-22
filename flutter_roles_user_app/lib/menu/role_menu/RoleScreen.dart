@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_roles_user_app/component/Skeleton.dart';
 import 'package:flutter_roles_user_app/menu/create_role_menu/CreateRoleScreen.dart';
+import 'package:flutter_roles_user_app/menu/role_menu/model/RoleModel.dart';
 import 'package:flutter_roles_user_app/repository/UserRepository.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../Dictionary.dart';
 import 'bloc/role_bloc.dart';
 
 class RoleScreen extends StatefulWidget {
@@ -16,30 +17,57 @@ class RoleScreen extends StatefulWidget {
 }
 
 class _RoleScreenState extends State<RoleScreen> {
+  final ScrollController _scrollController = ScrollController();
   RoleBloc _roleBloc;
-  RefreshController _mainRefreshController = RefreshController();
+  List<Role> _roleData = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider<RoleBloc>(
-        create: (BuildContext context) => _roleBloc =
-            RoleBloc(userRepository: UserRepository())..add(GetRoleEvent()),
-        child: BlocBuilder<RoleBloc, RoleState>(
-          builder: (context, state) => SmartRefresher(
-              controller: _mainRefreshController,
-              enablePullDown: true,
-              header: WaterDropMaterialHeader(),
-              onRefresh: refresh,
-              child: state is RoleLoading
+          create: (BuildContext context) => _roleBloc =
+              RoleBloc(userRepository: UserRepository())..add(GetRoleEvent()),
+          child: BlocListener(
+            listener: (context, state) async {
+              if (state is RoleLoadMore) {
+                if (_roleBloc.isFetching) {
+                  Scaffold.of(context).showSnackBar(
+                      SnackBar(content: Text(Dictionary.loadMore)));
+                }
+              } else if (state is RoleSuccess) {
+                _roleBloc.isFetching = false;
+                _roleData.addAll(state.roleModel.data);
+              } else if (state is ValidationError) {
+                _roleBloc.isFetching = false;
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(Dictionary.infoError),
+                        content: Text(state.errors.toString()),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(Dictionary.ok)),
+                        ],
+                      );
+                    });
+              } else {
+                _roleBloc.isFetching = false;
+              }
+            },
+            child: BlocBuilder<RoleBloc, RoleState>(
+              builder: (context, state) => state is RoleLoading
                   ? _buildLoading()
                   : state is RoleSuccess
-                      ? _buildContent(state)
+                      ? _buildContent()
                       : state is RoleFailure
                           ? _buildFailure(state)
-                          : Container()),
-        ),
-      ),
+                          : _buildContent(),
+            ),
+          )),
       floatingActionButton: Container(
         margin: const EdgeInsets.only(bottom: 10),
         child: FloatingActionButton(
@@ -60,10 +88,10 @@ class _RoleScreenState extends State<RoleScreen> {
           return Card(
             child: ListTile(
               title: Text(
-                'Loading',
+                Dictionary.loading,
               ),
-              subtitle: Text('Loading'),
-              trailing: Text('Loading'),
+              subtitle: Text(Dictionary.loading),
+              trailing: Text(Dictionary.loading),
             ),
           );
         },
@@ -71,21 +99,30 @@ class _RoleScreenState extends State<RoleScreen> {
     );
   }
 
-  _buildContent(RoleSuccess state) {
+  _buildContent() {
     return Container(
       child: ListView.builder(
-        itemCount: state.roleModel.data.length,
+        itemCount: _roleData.length,
+        controller: _scrollController
+          ..addListener(() {
+            if (_scrollController.offset ==
+                    _scrollController.position.maxScrollExtent &&
+                !_roleBloc.isFetching) {
+              _roleBloc.isFetching = true;
+              _roleBloc.add(GetRoleEvent());
+            }
+          }),
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (BuildContext context, int index) {
           return Card(
             child: ListTile(
               title: Text(
-                state.roleModel.data[index].title.toString(),
+                _roleData[index].title.toString(),
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
               ),
               subtitle: Html(
-                data: state.roleModel.data[index].description.toString(),
+                data: _roleData[index].description.toString(),
                 defaultTextStyle: TextStyle(color: Colors.black),
               ),
             ),
@@ -96,7 +133,7 @@ class _RoleScreenState extends State<RoleScreen> {
   }
 
   _buildFailure(RoleFailure state) {
-    return Container();
+    return Container(child: Text(state.error));
   }
 
   _addNewRole() {
@@ -106,14 +143,10 @@ class _RoleScreenState extends State<RoleScreen> {
     );
   }
 
-  Future<void> refresh() async {
-    _roleBloc.add(GetRoleEvent());
-    _mainRefreshController.refreshCompleted();
-  }
-
   @override
   void dispose() {
     _roleBloc.close();
+    _scrollController.dispose();
     super.dispose();
   }
 }

@@ -15,8 +15,8 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
-  UserBloc _userBloc;
   final ScrollController _scrollController = ScrollController();
+  UserBloc _userBloc;
   List<User> _userData = [];
 
   @override
