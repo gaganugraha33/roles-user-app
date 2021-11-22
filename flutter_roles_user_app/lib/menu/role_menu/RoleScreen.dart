@@ -27,7 +27,7 @@ class _RoleScreenState extends State<RoleScreen> {
       body: BlocProvider<RoleBloc>(
           create: (BuildContext context) => _roleBloc =
               RoleBloc(userRepository: UserRepository())..add(GetRoleEvent()),
-          child: BlocListener(
+          child: BlocListener<RoleBloc, RoleState>(
             listener: (context, state) async {
               if (state is RoleLoadMore) {
                 if (_roleBloc.isFetching) {
