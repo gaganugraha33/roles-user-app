@@ -19,6 +19,16 @@ class UserLoading extends UserState {
   List<Object> get props => [];
 }
 
+class UserLoadMore extends UserState {
+  @override
+  String toString() {
+    return 'State UserLoadMore';
+  }
+
+  @override
+  List<Object> get props => [];
+}
+
 class UserSuccess extends UserState {
   final UserModel userModel;
 

@@ -20,4 +20,7 @@ class Dictionary {
   static String hintRequirement = 'Input requirement of role';
   static String submit = 'Submit';
   static String validation = 'Please enter some text';
+  static String loadMore = 'load more';
+  static String loading = 'Loading';
+  static String infoError = 'Info Error';
 }

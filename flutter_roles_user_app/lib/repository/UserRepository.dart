@@ -13,14 +13,16 @@ import '../EndPointPath.dart';
 import '../exceptions/ErrorException.dart';
 
 class UserRepository {
-  final headers = {
+  final _headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
     HttpHeaders.acceptHeader: 'application/json'
   };
+  static const int _limit = 10;
 
-  Future<UserModel> getUserAPi() async {
+  Future<UserModel> getUserAPi({@required int page}) async {
     final response = await http
-        .get(EndPointPath.userApi, headers: headers)
+        .get('${EndPointPath.userApi}?limit=$_limit&page=$page',
+            headers: _headers)
         .timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {
@@ -40,9 +42,10 @@ class UserRepository {
     }
   }
 
-  Future<RoleModel> getRoleAPi() async {
+  Future<RoleModel> getRoleAPi({@required int page}) async {
     var response = await http
-        .get('${EndPointPath.roleApi}', headers: headers)
+        .get('${EndPointPath.roleApi}?limit=$_limit&page=$page',
+            headers: _headers)
         .timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {
@@ -74,7 +77,7 @@ class UserRepository {
 
     var response = await http
         .post('${EndPointPath.roleApi}',
-            headers: headers, body: json.encode(requestData))
+            headers: _headers, body: json.encode(requestData))
         .timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {

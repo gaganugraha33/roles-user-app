@@ -14,6 +14,7 @@ part 'role_state.dart';
 
 class RoleBloc extends Bloc<RoleEvent, RoleState> {
   final UserRepository userRepository;
+  int page = 1;
 
   RoleBloc({@required this.userRepository}) : assert(userRepository != null);
 
@@ -26,7 +27,7 @@ class RoleBloc extends Bloc<RoleEvent, RoleState> {
       yield RoleLoading();
 
       try {
-        RoleModel roleModel = await userRepository.getRoleAPi();
+        RoleModel roleModel = await userRepository.getRoleAPi(page: page);
         yield RoleSuccess(roleModel: roleModel);
       } on ValidationException catch (error) {
         yield ValidationError(errors: error.errors);

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_roles_user_app/Dictionary.dart';
 import 'package:flutter_roles_user_app/component/Skeleton.dart';
+import 'package:flutter_roles_user_app/menu/user_menu/model/UserModel.dart';
 import 'package:flutter_roles_user_app/repository/UserRepository.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'bloc/user_bloc.dart';
 
@@ -15,29 +16,58 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   UserBloc _userBloc;
-  RefreshController _mainRefreshController = RefreshController();
+  final ScrollController _scrollController = ScrollController();
+  List<User> _userData = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocProvider<UserBloc>(
-      create: (BuildContext context) => _userBloc =
-          UserBloc(userRepository: UserRepository())..add(GetUserEvent()),
-      child: BlocBuilder<UserBloc, UserState>(
-        builder: (context, state) => SmartRefresher(
-            controller: _mainRefreshController,
-            enablePullDown: true,
-            header: WaterDropMaterialHeader(),
-            onRefresh: refresh,
-            child: state is UserLoading
+      body: BlocProvider<UserBloc>(
+        create: (BuildContext context) => _userBloc =
+            UserBloc(userRepository: UserRepository())..add(GetUserEvent()),
+        child: BlocListener<UserBloc, UserState>(
+          listener: (context, state) async {
+            if (state is UserLoadMore) {
+              if (_userBloc.isFetching) {
+                Scaffold.of(context)
+                    .showSnackBar(SnackBar(content: Text(Dictionary.loadMore)));
+              }
+            } else if (state is UserSuccess) {
+              _userBloc.isFetching = false;
+              _userData.addAll(state.userModel.data);
+            } else if (state is ValidationError) {
+              _userBloc.isFetching = false;
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(Dictionary.infoError),
+                      content: Text(state.errors.toString()),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(Dictionary.ok)),
+                      ],
+                    );
+                  });
+            } else {
+              _userBloc.isFetching = false;
+            }
+          },
+          child: BlocBuilder<UserBloc, UserState>(
+            builder: (context, state) => state is UserLoading
                 ? _buildLoading()
                 : state is UserSuccess
-                    ? _buildContent(state)
+                    ? _buildContent()
                     : state is UserFailure
                         ? _buildFailure(state)
-                        : Container()),
+                        : _buildContent(),
+          ),
+        ),
       ),
-    ));
+    );
   }
 
   _buildLoading() {
@@ -49,10 +79,10 @@ class _UserScreenState extends State<UserScreen> {
           return Card(
             child: ListTile(
               title: Text(
-                'Loading',
+                Dictionary.loading,
               ),
-              subtitle: Text('Loading'),
-              trailing: Text('Loading'),
+              subtitle: Text(Dictionary.loading),
+              trailing: Text(Dictionary.loading),
             ),
           );
         },
@@ -60,25 +90,34 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-  _buildContent(UserSuccess state) {
+  _buildContent() {
     return Container(
       child: ListView.builder(
-        itemCount: state.userModel.data.length,
+        controller: _scrollController
+          ..addListener(() {
+            if (_scrollController.offset ==
+                    _scrollController.position.maxScrollExtent &&
+                !_userBloc.isFetching) {
+              _userBloc.isFetching = true;
+              _userBloc.add(GetUserEvent());
+            }
+          }),
+        itemCount: _userData.length,
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (BuildContext context, int index) {
           return Card(
             child: ListTile(
               title: Text(
-                state.userModel.data[index].fullname,
+                _userData[index].fullname,
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
               ),
               subtitle: Text(
-                state.userModel.data[index].email,
+                _userData[index].email,
                 style: TextStyle(color: Colors.black),
               ),
               trailing: Text(
-                state.userModel.data[index].phone,
+                _userData[index].phone,
                 style: TextStyle(color: Colors.black),
               ),
             ),
@@ -89,17 +128,13 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   _buildFailure(UserFailure state) {
-    return Container();
-  }
-
-  Future<void> refresh() async {
-    _userBloc.add(GetUserEvent());
-    _mainRefreshController.refreshCompleted();
+    return Container(child: Text(state.error));
   }
 
   @override
   void dispose() {
     _userBloc.close();
+    _scrollController.dispose();
     super.dispose();
   }
 }
