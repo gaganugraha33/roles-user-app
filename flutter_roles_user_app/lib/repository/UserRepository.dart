@@ -72,14 +72,10 @@ class UserRepository {
       "description": description,
     };
 
-    print('params ' + requestData.toString());
-
     var response = await http
         .post('${EndPointPath.roleApi}',
             headers: headers, body: json.encode(requestData))
         .timeout(const Duration(seconds: 10));
-
-    print('cekk response ' + response.body.toString());
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
