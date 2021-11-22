@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_roles_user_app/blocs/create_role_bloc/create_role_bloc.dart';
 import 'package:flutter_roles_user_app/component/BlockCircleLoading.dart';
 import 'package:flutter_roles_user_app/component/CustomTextFormField.dart';
 import 'package:flutter_roles_user_app/component/DialogTextOnly.dart';
 import 'package:flutter_roles_user_app/main.dart';
 import 'package:flutter_roles_user_app/repository/UserRepository.dart';
 
-import '../Dictionary.dart';
+import '../../Dictionary.dart';
+import 'bloc/create_role_bloc.dart';
 
 class CreateRoleScreen extends StatefulWidget {
   const CreateRoleScreen({Key key}) : super(key: key);

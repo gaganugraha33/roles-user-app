@@ -1,5 +1,5 @@
 import '../Dictionary.dart';
-import '../ErrorException.dart';
+import 'ErrorException.dart';
 
 class CustomException {
   static String onConnectionException(String error) {

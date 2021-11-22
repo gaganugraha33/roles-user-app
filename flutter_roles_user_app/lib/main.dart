@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_roles_user_app/screen/RoleScreen.dart';
-import 'package:flutter_roles_user_app/screen/UserScreen.dart';
 import 'package:bloc/bloc.dart';
+
+import 'menu/role_menu/RoleScreen.dart';
+import 'menu/user_menu/UserScreen.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override

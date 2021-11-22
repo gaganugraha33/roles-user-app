@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_roles_user_app/exceptions/CustomException.dart';
 import 'package:flutter_roles_user_app/exceptions/ValidationException.dart';
-import 'package:flutter_roles_user_app/model/CreateRoleModel.dart';
+import 'package:flutter_roles_user_app/menu/create_role_menu/model/CreateRoleModel.dart';
 import 'package:flutter_roles_user_app/repository/UserRepository.dart';
 
 part 'create_role_event.dart';

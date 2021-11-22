@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_roles_user_app/blocs/role_bloc/role_bloc.dart';
 import 'package:flutter_roles_user_app/component/Skeleton.dart';
+import 'package:flutter_roles_user_app/menu/create_role_menu/CreateRoleScreen.dart';
 import 'package:flutter_roles_user_app/repository/UserRepository.dart';
-import 'package:flutter_roles_user_app/screen/CreateRoleScreen.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import 'bloc/role_bloc.dart';
 
 class RoleScreen extends StatefulWidget {
   const RoleScreen({Key key}) : super(key: key);

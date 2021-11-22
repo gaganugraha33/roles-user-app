@@ -4,7 +4,7 @@ import 'package:flutter_roles_user_app/component/Skeleton.dart';
 import 'package:flutter_roles_user_app/repository/UserRepository.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../blocs/user_bloc/user_bloc.dart';
+import 'bloc/user_bloc.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({Key key}) : super(key: key);

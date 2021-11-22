@@ -3,14 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_roles_user_app/exceptions/ValidationException.dart';
-import 'package:flutter_roles_user_app/model/CreateRoleModel.dart';
-import 'package:flutter_roles_user_app/model/RoleModel.dart';
-import 'package:flutter_roles_user_app/model/UserModel.dart';
+import 'package:flutter_roles_user_app/menu/create_role_menu/model/CreateRoleModel.dart';
+import 'package:flutter_roles_user_app/menu/role_menu/model/RoleModel.dart';
+import 'package:flutter_roles_user_app/menu/user_menu/model/UserModel.dart';
 import 'package:http/http.dart' as http;
 
 import '../Dictionary.dart';
 import '../EndPointPath.dart';
-import '../ErrorException.dart';
+import '../exceptions/ErrorException.dart';
 
 class UserRepository {
   final headers = {
