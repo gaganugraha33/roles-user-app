@@ -91,44 +91,51 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   _buildContent() {
-    return Container(
-      child: ListView.builder(
-        controller: _scrollController
-          ..addListener(() {
-            if (_scrollController.offset ==
-                    _scrollController.position.maxScrollExtent &&
-                !_userBloc.isFetching) {
-              _userBloc.isFetching = true;
-              _userBloc.add(GetUserEvent());
-            }
-          }),
-        itemCount: _userData.length,
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: ListTile(
-              title: Text(
-                _userData[index].fullname,
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-              ),
-              subtitle: Text(
-                _userData[index].email,
-                style: TextStyle(color: Colors.black),
-              ),
-              trailing: Text(
-                _userData[index].phone,
-                style: TextStyle(color: Colors.black),
-              ),
+    return _userData.isNotEmpty
+        ? Container(
+            child: ListView.builder(
+              controller: _scrollController
+                ..addListener(() {
+                  if (_scrollController.offset ==
+                          _scrollController.position.maxScrollExtent &&
+                      !_userBloc.isFetching) {
+                    _userBloc.isFetching = true;
+                    _userBloc.add(GetUserEvent());
+                  }
+                }),
+              itemCount: _userData.length,
+              padding: const EdgeInsets.all(16.0),
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(
+                      _userData[index].fullname,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                    subtitle: Text(
+                      _userData[index].email,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    trailing: Text(
+                      _userData[index].phone,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        : Center(
+            child: Text(
+              Dictionary.dataEmpty,
+              textScaleFactor: 3,
             ),
           );
-        },
-      ),
-    );
   }
 
   _buildFailure(UserFailure state) {
-    return Container(child: Text(state.error));
+    return Center(child: Text(state.error, textScaleFactor: 3));
   }
 
   @override

@@ -100,40 +100,47 @@ class _RoleScreenState extends State<RoleScreen> {
   }
 
   _buildContent() {
-    return Container(
-      child: ListView.builder(
-        itemCount: _roleData.length,
-        controller: _scrollController
-          ..addListener(() {
-            if (_scrollController.offset ==
-                    _scrollController.position.maxScrollExtent &&
-                !_roleBloc.isFetching) {
-              _roleBloc.isFetching = true;
-              _roleBloc.add(GetRoleEvent());
-            }
-          }),
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: ListTile(
-              title: Text(
-                _roleData[index].title.toString(),
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-              ),
-              subtitle: Html(
-                data: _roleData[index].description.toString(),
-                defaultTextStyle: TextStyle(color: Colors.black),
-              ),
+    return _roleData.isNotEmpty
+        ? Container(
+            child: ListView.builder(
+              itemCount: _roleData.length,
+              controller: _scrollController
+                ..addListener(() {
+                  if (_scrollController.offset ==
+                          _scrollController.position.maxScrollExtent &&
+                      !_roleBloc.isFetching) {
+                    _roleBloc.isFetching = true;
+                    _roleBloc.add(GetRoleEvent());
+                  }
+                }),
+              padding: const EdgeInsets.all(16.0),
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(
+                      _roleData[index].title.toString(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                    subtitle: Html(
+                      data: _roleData[index].description.toString(),
+                      defaultTextStyle: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        : Center(
+            child: Text(
+              Dictionary.dataEmpty,
+              textScaleFactor: 3,
             ),
           );
-        },
-      ),
-    );
   }
 
   _buildFailure(RoleFailure state) {
-    return Container(child: Text(state.error));
+    return Center(child: Text(state.error, textScaleFactor: 3));
   }
 
   _addNewRole() {

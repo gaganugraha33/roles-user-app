@@ -23,4 +23,5 @@ class Dictionary {
   static String loadMore = 'load more';
   static String loading = 'Loading';
   static String infoError = 'Info Error';
+  static String dataEmpty = 'Data Is Empty';
 }
