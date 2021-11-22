@@ -10,4 +10,14 @@ class Dictionary {
 
   static String requiredForm = ' • Must be filled';
   static String ok = 'OK';
+  static String createRole = 'Create Role';
+  static String createRoleSucceess = 'Create role success';
+  static String title = 'Title';
+  static String hintRole = 'Input name of role';
+  static String description = 'Description';
+  static String hintDescription = 'Input description of role';
+  static String requirement = 'Requirement';
+  static String hintRequirement = 'Input requirement of role';
+  static String submit = 'Submit';
+  static String validation = 'Please enter some text';
 }
